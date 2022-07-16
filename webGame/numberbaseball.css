@@ -1,0 +1,101 @@
+/* 숫자 야구 게임에 사용한 CSS */
+
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'jua', 'aria';
+}
+
+.bg {
+  background-color: #f4efea;
+  color: #9a161f;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: normal;
+  animation: color-change 5s linear infinite;
+}
+
+.baseball-icon {
+  display: inline-block;
+  animation: rotation 7s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes color-change {
+  0% {
+    color: #9a161f;
+  }
+
+  50% {
+    color: #2e2223;
+  }
+
+  100% {
+    color: #9a161f;
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.sub-text {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  color: #2e2223;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 250px;
+}
+
+.input-box {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  border: 3px solid #9a161f;
+}
+
+.input-box:focus {
+}
+
+.btn {
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+  background: #9a161f;
+  color: #f4efea;
+  font-size: 20px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #76141b;
+}
+
+.result-container {
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+li {
+  list-style: none;
+}
