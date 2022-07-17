@@ -11,11 +11,17 @@ function newGame() {
   return array;
 }
 
-class NumberBaseball extends Component {
+class NumberBaseball2 extends Component {
   state = {
     userInputValue: '',
     quiz: newGame(),
     result: [],
+  };
+
+  inputRef;
+
+  onRefInput = (c) => {
+    this.inputRef = c;
   };
 
   timer = () => {
@@ -30,6 +36,12 @@ class NumberBaseball extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+
+    if (this.state.userInputValue === '') {
+      alert('값을 입력해주세요!');
+      this.inputRef.focus();
+      return;
+    }
 
     const currentQuiz = [...this.state.quiz];
     let currentResult = '';
@@ -90,7 +102,7 @@ class NumberBaseball extends Component {
         </h2>
         <p className="sub-text">1 ~ 9 중 4가지 숫자를 입력하세요.</p>
         <form className="game-container" onSubmit={this.onSubmit}>
-          <input onChange={this.onChange} value={this.state.userInputValue} className="input-box" type="number" />
+          <input ref={this.onRefInput} minLength="4" maxLength="4" onChange={this.onChange} value={this.state.userInputValue} className="input-box" type="text" />
           <button className="btn">확인</button>
         </form>
         <ul className="result-container">
