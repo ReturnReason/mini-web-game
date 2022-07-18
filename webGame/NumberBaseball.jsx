@@ -11,7 +11,7 @@ function newGame() {
   return array;
 }
 
-class NumberBaseball2 extends Component {
+class NumberBaseball extends Component {
   state = {
     userInputValue: '',
     quiz: newGame(),
