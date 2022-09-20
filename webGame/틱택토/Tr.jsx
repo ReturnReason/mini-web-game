@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useCallback, memo } from 'react';
 import Td from './Td';
 
-function Tr({ rowData }) {
+function Tr({ rowData, rowIndex, dispatch }) {
   return (
     <tr>
-      {rowData.map((td, i) => {
-        return <Td key={`${i}번째 td`}></Td>;
+      {rowData.map((cell, i) => {
+        return <Td key={`${i}번째 td`} dispatch={dispatch} cellData={cell} cellIndex={i} rowIndex={rowIndex}></Td>;
       })}
     </tr>
   );
 }
 
-export default Tr;
+export default memo(Tr);
