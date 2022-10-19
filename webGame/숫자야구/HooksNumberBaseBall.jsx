@@ -1,10 +1,48 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import style from './HooksNumberBaseball.css';
 
 function HooksNumberBaseball() {
   const inputRef = useRef();
   const [userAnswer, setUserAnswer] = useState('');
   const [quiz, setQuiz] = useState(newQuiz);
   const [result, setResult] = useState([]);
+  const [count, setCount] = useState(1);
+  const [gameOver, setGameOver] = useState(false);
+  const [gameOverCount, setGameOverCount] = useState(3);
+  console.log(quiz);
+
+  useEffect(() => {
+    if (count > 11) {
+      alert('10회를 초과하여 게임을 재실행합니다.');
+      alert(`정답은 ${quiz.join('')} 였습니다.`);
+      setQuiz(newQuiz());
+      setUserAnswer('');
+      setResult([]);
+      setCount(1);
+      setGameOver(true);
+      setGameOverCount(3);
+    }
+  }, [count, quiz]);
+
+  // 게임 종료시 카운트 다운
+  useEffect(() => {
+    let timer;
+    if (gameOver) {
+      timer = setInterval(() => {
+        setGameOverCount(gameOverCount - 1);
+
+        if (gameOverCount === 1) {
+          clearInterval(timer);
+          setGameOver(false);
+          return;
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [gameOver, gameOverCount]);
 
   /** 사용자가 input 입력시 state 변경 **/
   const onChange = (e) => {
@@ -17,19 +55,17 @@ function HooksNumberBaseball() {
 
     const currentQuiz = quiz.join('');
     checkAnswer(currentQuiz, userAnswer);
+    setCount(count + 1);
 
     // 10회 초과 입력시
-    if (result.length >= 10) {
-      alert('10회를 초과하여 게임을 재실행합니다.');
-      alert(`정답은 ${quiz.join('')} 였습니다.`);
-      setQuiz(newQuiz());
-      setUserAnswer('');
-      setResult([]);
-    }
 
     setUserAnswer('');
     inputRef.current.focus();
   };
+
+  function Countdown() {
+    return <div>{gameOverCount}초 후 게임이 재시작됩니다.</div>;
+  }
 
   /** 사용자가 입력한 정답과 실제 퀴즈 정답이 맞는지 비교하는 함수 **/
   function checkAnswer(quiz, userAnswer) {
@@ -59,7 +95,13 @@ function HooksNumberBaseball() {
             }
           }
         }
-        setResult([...result, { inputvalue: userAnswer, condition: `${strike} 스트라이크, ${ball} 볼 입니다.` }]);
+        setResult([
+          ...result,
+          {
+            inputvalue: userAnswer,
+            condition: `${strike} 스트라이크, ${ball} 볼 입니다.`,
+          },
+        ]);
       }
     }
   }
@@ -91,19 +133,35 @@ function HooksNumberBaseball() {
   return (
     <div className="bg">
       <h2 className="title">
-        <span className="baseball-icon">⚾</span> 숫자 야구 게임 <span className="baseball-icon">⚾</span>
+        <span className="baseball-icon">⚾</span> 숫자 야구 게임{' '}
+        <span className="baseball-icon">⚾</span>
       </h2>
       <p className="sub-text">1 ~ 9 중 4가지 숫자를 입력하세요.</p>
       <form onSubmit={onSubmit} className="game-container">
-        <input value={userAnswer} onChange={onChange} ref={inputRef} minLength="4" maxLength="4" className="input-box" type="text" />
-        <button className="btn">확인</button>
+        {gameOver && <Countdown />}
+        {!gameOver && (
+          <>
+            <input
+              value={userAnswer}
+              onChange={onChange}
+              ref={inputRef}
+              minLength="4"
+              maxLength="4"
+              className="input-box"
+              type="text"
+            />
+            <button className="btn">확인</button>
+          </>
+        )}
       </form>
       <ul className="result-container">
         {result.map((v, index) => {
           return (
             <li key={`${index}번째 트라이`}>
-              <p>입력 값 : {v.inputvalue}</p>
-              {index + 1} 번째 시도 : {v.condition}
+              <p>
+                {} 입력 값 [ {v.inputvalue} ]
+              </p>
+              ❤ {index + 1} 번째 시도는 : {v.condition}
             </li>
           );
         })}
